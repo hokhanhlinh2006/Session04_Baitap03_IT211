@@ -1,0 +1,53 @@
+Phần 1 – Lý thuyết:
+So sánh @PathVariable và @RequestParam theo: vị trí trên URL, mục đích sử dụng,
+ ví dụ thực tế. Giải thích tại sao dùng @PathVariable cho định danh tài nguyên và @RequestParam cho lọc/tìm kiếm.
+ Phần 1 – Lý thuyết
+ So sánh @PathVariable và @RequestParam
+ Tiêu chí	@PathVariable	@RequestParam
+ Vị trí trên URL	Trong path URL	Sau dấu ?
+ Mục đích	Định danh tài nguyên cụ thể	Lọc, tìm kiếm, phân trang
+ Bắt buộc	Thường bắt buộc	Có thể optional
+ Ví dụ	/movies/M001	/movies?genre=Sci-Fi
+ Tình huống nào dùng gì?
+ Tình huống A — Xem chi tiết phim
+ GET /api/v1/movies/M001
+
+ ✅ Dùng @PathVariable
+
+ Vì:
+
+ M001 là ID định danh duy nhất của tài nguyên Movie.
+ URL đang truy cập trực tiếp vào một resource cụ thể.
+
+ Ví dụ:
+
+ @GetMapping("/{movieId}")
+ Tình huống B — Lọc theo thể loại
+ GET /api/v1/movies?genre=Sci-Fi
+
+ ✅ Dùng @RequestParam
+
+ Vì:
+
+ genre chỉ là điều kiện lọc dữ liệu.
+ Không đại diện cho tài nguyên cụ thể.
+
+ Ví dụ:
+
+ @RequestParam String genre
+ Vì sao không hoán đổi cho nhau?
+ Sai nếu dùng @RequestParam cho ID
+ GET /movies?id=M001
+
+ → Không RESTful bằng vì ID tài nguyên nên nằm trong path.
+
+ Sai nếu dùng @PathVariable cho filter
+ GET /movies/Sci-Fi
+
+ → Dễ nhầm Sci-Fi là ID phim thay vì điều kiện lọc.
+
+ URL chuẩn RESTful hơn
+ Xem chi tiết
+ GET /api/v1/movies/M001
+ Lọc dữ liệu
+ GET /api/v1/movies?genre=Sci-Fi
